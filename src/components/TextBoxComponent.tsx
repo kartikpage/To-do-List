@@ -47,7 +47,7 @@ const TextBoxComponent: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto">
-      <div className="flex items-center border-b border-b-2 border-teal-500 py-2">
+      <div className="flex items-center border-b-2 border-teal-500 py-2">
         <input
           className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           type="text"
@@ -66,23 +66,25 @@ const TextBoxComponent: React.FC = () => {
       <ul>
         {messages.map(message => (
           <li key={message.id} className="flex justify-between items-center border-b border-gray-300 py-2">
-            <label className="flex items-center">
+            <div className="flex items-center w-full">
               <input
                 type="checkbox"
                 checked={message.isCompleted}
                 onChange={() => handleCheckboxChange(message.id)}
-                className="form-checkbox h-5 w-5 text-teal-600"
+                className="form-checkbox h-5 w-5 text-teal-600 mr-2"
               />
-              <span className={ml-2 ${message.isCompleted ? 'line-through' : ''}}>
+              <span className={`flex-1 ${message.isCompleted ? 'line-through' : ''}`}>
                 {message.text}
               </span>
-            </label>
-            <button
-              className="text-red-500 hover:text-red-700 mx-2"
-              onClick={() => handleRemoveTask(message.id)}
-            >
-              Remove
-            </button>
+              <button
+                className="text-red-500 hover:text-red-700 ml-2"
+                onClick={() => handleRemoveTask(message.id)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </li>
         ))}
       </ul>
