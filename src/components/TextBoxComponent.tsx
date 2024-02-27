@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import '../index.css';
 
 const TextBoxComponent: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>("");
-  const [messages, setMessages] = useState<
-    { id: number; text: string; isCompleted: boolean }[]
-  >(() => {
-    const storedMessages = localStorage.getItem("messages");
+  const [inputValue, setInputValue] = useState<string>('');
+  const [messages, setMessages] = useState<{ id: number; text: string; isCompleted: boolean }[]>(() => {
+    const storedMessages = localStorage.getItem('messages');
     return storedMessages ? JSON.parse(storedMessages) : [];
   });
 
@@ -14,28 +13,26 @@ const TextBoxComponent: React.FC = () => {
   };
 
   const handleAddTask = () => {
-    if (inputValue.trim() !== "") {
+    if (inputValue.trim() !== '') {
       const newTask = { id: Date.now(), text: inputValue, isCompleted: false };
-      setMessages((prevMessages) => [...prevMessages, newTask]);
-      setInputValue("");
+      setMessages(prevMessages => [...prevMessages, newTask]);
+      setInputValue('');
     }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       handleAddTask();
     }
   };
 
   const handleRemoveTask = (id: number) => {
-    setMessages((prevMessages) =>
-      prevMessages.filter((message) => message.id !== id)
-    );
+    setMessages(prevMessages => prevMessages.filter(message => message.id !== id));
   };
 
-  const toggleCompleted = (id: number) => {
-    setMessages((prevMessages) => {
-      return prevMessages.map((message) => {
+  const handleCheckboxChange = (id: number) => {
+    setMessages(prevMessages => {
+      return prevMessages.map(message => {
         if (message.id === id) {
           return { ...message, isCompleted: !message.isCompleted };
         }
@@ -45,35 +42,47 @@ const TextBoxComponent: React.FC = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem("messages", JSON.stringify(messages));
+    localStorage.setItem('messages', JSON.stringify(messages));
   }, [messages]);
 
   return (
-    <div>
-      <div>
+    <div className="max-w-md mx-auto">
+      <div className="flex items-center border-b border-b-2 border-teal-500 py-2">
         <input
+          className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
           type="text"
           value={inputValue}
           onChange={handleChange}
           onKeyPress={handleKeyPress}
           placeholder="Add a new task..."
         />
-        <button onClick={handleAddTask}>Add Task</button>
+        <button
+          className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+          onClick={handleAddTask}
+        >
+          Add Task
+        </button>
       </div>
       <ul>
-        {messages.map((message) => (
-          <li key={message.id}>
-            <span
-              style={{
-                textDecoration: message.isCompleted ? "line-through" : "none",
-              }}
+        {messages.map(message => (
+          <li key={message.id} className="flex justify-between items-center border-b border-gray-300 py-2">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={message.isCompleted}
+                onChange={() => handleCheckboxChange(message.id)}
+                className="form-checkbox h-5 w-5 text-teal-600"
+              />
+              <span className={ml-2 ${message.isCompleted ? 'line-through' : ''}}>
+                {message.text}
+              </span>
+            </label>
+            <button
+              className="text-red-500 hover:text-red-700 mx-2"
+              onClick={() => handleRemoveTask(message.id)}
             >
-              {message.text}
-            </span>
-            <button onClick={() => toggleCompleted(message.id)}>
-              {message.isCompleted ? "Undo" : "Complete"}
+              Remove
             </button>
-            <button onClick={() => handleRemoveTask(message.id)}>Remove</button>
           </li>
         ))}
       </ul>
@@ -82,4 +91,3 @@ const TextBoxComponent: React.FC = () => {
 };
 
 export default TextBoxComponent;
-
