@@ -4,8 +4,8 @@ import TextBoxComponent from './components/TextBoxComponent';
 
 const Main: React.FC = () => {
   return (
-    <div>
-      <h1>To-do List</h1>
+    <div className="max-w-md mx-auto mt-10">
+      <h1 className="text-3xl font-bold mb-6">To-do List</h1>
       <TextBoxComponent />
     </div>
   );
